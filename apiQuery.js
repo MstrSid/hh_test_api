@@ -3,13 +3,15 @@
 const baseUrl = "https://api.hh.ru";
 const div = document.createElement('div');
 
-fetch(`${baseUrl}/vacancies?professional_role=96`)
-	.then(response => response.json())
-	.then(data => Object.values(data))
-	.then(res => showData(res));
+function getData(url) {
+	return fetch(`${baseUrl}${url}`)
+		.then(response => response.json())
+		.then(data => Object.values(data));
+}
 
-function showData(data) {
-	console.log(data[0][0]);
+async function showData() {
+	const data = await getData('/vacancies?professional_role=96');
+	//console.log(data[0][0]);
 	data[0].forEach(item => {
 		div.innerHTML += `
 ${item['name']}
@@ -29,3 +31,5 @@ ${item['name']}
 	});
 	document.querySelector('body').append(div);
 }
+
+showData().catch(e => console.error(e));
